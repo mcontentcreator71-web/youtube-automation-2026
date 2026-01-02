@@ -1,21 +1,19 @@
 # Dockerfile for n8n with Python video production support
-# Use Node.js Debian-based image for better Python package compatibility
-FROM node:20-slim
+# Use official n8n Alpine image as base (much smaller)
+FROM n8nio/n8n:latest-alpine
+
+# Switch to root to install Python
+USER root
 
 # Install Python, FFmpeg, ImageMagick, and build dependencies
-RUN apt-get update && apt-get install -y \
+RUN apk add --no-cache --update \
     python3 \
-    python3-pip \
+    py3-pip \
     ffmpeg \
     imagemagick \
-    build-essential \
+    build-base \
     python3-dev \
-    && pip3 install --upgrade pip --break-system-packages \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
-
-# Install n8n globally
-RUN npm install -g n8n
+    && pip3 install --upgrade pip --break-system-packages
 
 # Copy Python scripts
 WORKDIR /home/node
@@ -26,22 +24,19 @@ COPY youtube_upload.py .
 
 # Install Python dependencies and clean up in one layer to reduce image size
 RUN pip3 install --no-cache-dir -r requirements.txt --break-system-packages \
-    && apt-get remove -y build-essential python3-dev \
-    && apt-get autoremove -y \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
+    && apk del build-base python3-dev \
     && rm -rf /tmp/* \
     && rm -rf /root/.cache/pip \
-    && find /usr/local/lib/python3.*/dist-packages -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true \
-    && find /usr/local/lib/python3.*/dist-packages -name "*.pyc" -delete
+    && find /usr/lib/python3.*/site-packages -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true \
+    && find /usr/lib/python3.*/site-packages -name "*.pyc" -delete
 
 # Create videos directory
 RUN mkdir -p /home/node/videos && chown -R node:node /home/node
 
-# Switch to node user
+# Switch back to node user (n8n image uses node user)
 USER node
 
-# Set environment variables
+# Set environment variables (n8n already has defaults, override if needed)
 ENV N8N_BASIC_AUTH_ACTIVE=true
 ENV N8N_HOST=0.0.0.0
 ENV N8N_PORT=5678
@@ -55,5 +50,5 @@ EXPOSE 5678
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:5678/healthz', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start n8n
+# Start n8n (CMD is already set in base image, but we can override if needed)
 CMD ["n8n", "start"]
