@@ -1,15 +1,17 @@
 # Dockerfile for n8n with Python video production support
-FROM n8nio/n8n:latest
+# Use Node.js base image and install n8n + Python
+FROM node:20-alpine
 
-# Install Python and dependencies
-USER root
-
+# Install Python, FFmpeg, and ImageMagick
 RUN apk add --no-cache --update \
     python3 \
     py3-pip \
     ffmpeg \
     imagemagick \
     && pip3 install --upgrade pip
+
+# Install n8n globally
+RUN npm install -g n8n
 
 # Copy Python scripts
 WORKDIR /home/node
@@ -24,7 +26,7 @@ RUN pip3 install -r requirements.txt
 # Create videos directory
 RUN mkdir -p /home/node/videos && chown -R node:node /home/node
 
-# Switch back to node user
+# Switch to node user
 USER node
 
 # Set environment variables
