@@ -4,14 +4,12 @@ FROM n8nio/n8n:latest
 # Install Python and dependencies
 USER root
 
-RUN apt-get update && apt-get install -y \
+RUN apk add --no-cache --update \
     python3 \
-    python3-pip \
+    py3-pip \
     ffmpeg \
     imagemagick \
-    && pip3 install --upgrade pip \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && pip3 install --upgrade pip
 
 # Copy Python scripts
 WORKDIR /home/node
