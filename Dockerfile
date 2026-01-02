@@ -38,9 +38,14 @@ ENV N8N_BASIC_AUTH_ACTIVE=true
 ENV N8N_HOST=0.0.0.0
 ENV N8N_PORT=5678
 ENV NODE_ENV=production
+ENV N8N_USER_FOLDER=/home/node/.n8n
 
 # Expose n8n port
 EXPOSE 5678
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:5678/healthz', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
 # Start n8n
 CMD ["n8n", "start"]
