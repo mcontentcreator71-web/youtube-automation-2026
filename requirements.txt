@@ -1,0 +1,35 @@
+# YouTube Automation Requirements for The AI Ledger
+
+# Video Production
+gtts==2.5.1
+moviepy==1.0.3
+openai-whisper==20231117
+Pillow==10.4.0
+
+# YouTube API
+google-auth==2.24.0
+google-auth-oauthlib==1.1.0
+google-auth-httplib2==0.1.1
+google-api-python-client==2.108.0
+
+# Web Scraping
+beautifulsoup4==4.12.3
+requests==2.31.0
+praw==7.7.1
+crawl4ai==0.3.0
+
+# AI/ML
+google-generativeai==0.3.2
+
+# Scheduling
+APScheduler==3.10.4
+
+# Utilities
+python-dotenv==1.0.1
+
+
+
+
+
+
+

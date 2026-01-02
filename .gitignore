@@ -1,0 +1,77 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Video files
+videos/
+*.mp4
+*.mp3
+*.wav
+*.avi
+*.mov
+*.srt
+*.vtt
+
+# Credentials and secrets
+client_secrets.json
+youtube_credentials.pickle
+*.pem
+*.key
+.env
+.env.local
+credentials.json
+token.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# n8n
+.n8n/
+n8n_data/
+
+# FFmpeg
+ffmpeg.zip
+
+# Documentation (keep only essential)
+# Remove temporary guide files
+*_FIX.md
+*_STATUS.md
+*_GUIDE.md
+!README.md
+!DEPLOYMENT_GUIDE.md
+!GITHUB_SETUP.md
+
+# Node modules (if any)
+node_modules/
+
+# Build artifacts
+*.zip
+*.tar.gz
