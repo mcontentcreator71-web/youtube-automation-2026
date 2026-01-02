@@ -8,7 +8,7 @@ RUN apk add --no-cache --update \
     py3-pip \
     ffmpeg \
     imagemagick \
-    && pip3 install --upgrade pip
+    && pip3 install --upgrade pip --break-system-packages
 
 # Install n8n globally
 RUN npm install -g n8n
@@ -21,7 +21,7 @@ COPY run_video_production.py .
 COPY youtube_upload.py .
 
 # Install Python dependencies
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt --break-system-packages
 
 # Create videos directory
 RUN mkdir -p /home/node/videos && chown -R node:node /home/node
