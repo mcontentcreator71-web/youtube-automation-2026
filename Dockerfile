@@ -4,12 +4,14 @@ FROM n8nio/n8n:latest
 # Install Python and dependencies
 USER root
 
-RUN apk add --no-cache \
+RUN apt-get update && apt-get install -y \
     python3 \
-    py3-pip \
+    python3-pip \
     ffmpeg \
     imagemagick \
-    && pip3 install --upgrade pip
+    && pip3 install --upgrade pip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy Python scripts
 WORKDIR /home/node
@@ -38,4 +40,3 @@ EXPOSE 5678
 
 # Start n8n
 CMD ["n8n", "start"]
-
