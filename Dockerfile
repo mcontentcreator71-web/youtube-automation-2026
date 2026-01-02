@@ -1,9 +1,6 @@
 # Dockerfile for n8n with Python video production support
-# Use official n8n Alpine image as base (much smaller)
-FROM n8nio/n8n:alpine
-
-# Switch to root to install Python
-USER root
+# Use Node.js Alpine base and install n8n (smaller than Debian)
+FROM node:20-alpine
 
 # Install Python, FFmpeg, ImageMagick, and build dependencies
 RUN apk add --no-cache --update \
@@ -14,6 +11,9 @@ RUN apk add --no-cache --update \
     build-base \
     python3-dev \
     && pip3 install --upgrade pip --break-system-packages
+
+# Install n8n globally
+RUN npm install -g n8n
 
 # Copy Python scripts
 WORKDIR /home/node
@@ -33,10 +33,10 @@ RUN pip3 install --no-cache-dir -r requirements.txt --break-system-packages \
 # Create videos directory
 RUN mkdir -p /home/node/videos && chown -R node:node /home/node
 
-# Switch back to node user (n8n image uses node user)
+# Switch to node user
 USER node
 
-# Set environment variables (n8n already has defaults, override if needed)
+# Set environment variables
 ENV N8N_BASIC_AUTH_ACTIVE=true
 ENV N8N_HOST=0.0.0.0
 ENV N8N_PORT=5678
@@ -50,5 +50,5 @@ EXPOSE 5678
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:5678/healthz', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start n8n (CMD is already set in base image, but we can override if needed)
+# Start n8n
 CMD ["n8n", "start"]
