@@ -24,8 +24,16 @@ COPY video_production.py .
 COPY run_video_production.py .
 COPY youtube_upload.py .
 
-# Install Python dependencies
-RUN pip3 install -r requirements.txt --break-system-packages
+# Install Python dependencies and clean up in one layer to reduce image size
+RUN pip3 install --no-cache-dir -r requirements.txt --break-system-packages \
+    && apt-get remove -y build-essential python3-dev \
+    && apt-get autoremove -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /tmp/* \
+    && rm -rf /root/.cache/pip \
+    && find /usr/local/lib/python3.*/dist-packages -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true \
+    && find /usr/local/lib/python3.*/dist-packages -name "*.pyc" -delete
 
 # Create videos directory
 RUN mkdir -p /home/node/videos && chown -R node:node /home/node
