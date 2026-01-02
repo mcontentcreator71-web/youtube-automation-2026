@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
     imagemagick \
     build-essential \
     python3-dev \
-    && pip3 install --upgrade pip \
+    && pip3 install --upgrade pip --break-system-packages \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -25,7 +25,7 @@ COPY run_video_production.py .
 COPY youtube_upload.py .
 
 # Install Python dependencies
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r requirements.txt --break-system-packages
 
 # Create videos directory
 RUN mkdir -p /home/node/videos && chown -R node:node /home/node
