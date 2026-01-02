@@ -1,6 +1,6 @@
 # Dockerfile for n8n with Python video production support
 # Use official n8n Alpine image as base (much smaller)
-FROM n8nio/n8n:latest-alpine
+FROM n8nio/n8n:alpine
 
 # Switch to root to install Python
 USER root
