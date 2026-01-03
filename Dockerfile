@@ -46,6 +46,9 @@ ENV N8N_PORT=5678
 ENV NODE_ENV=production
 ENV N8N_USER_FOLDER=/home/node/.n8n
 ENV DB_SQLITE_BUSY_TIMEOUT=30000
+ENV N8N_EDITOR_BASE_URL=https://youtube-automation-2026-n8n-ai-automation-f8654106.koyeb.app/
+ENV WEBHOOK_URL=https://youtube-automation-2026-n8n-ai-automation-f8654106.koyeb.app/
+ENV NODE_OPTIONS=--max-http-header-size=16384
 
 # Expose n8n port
 EXPOSE 5678
