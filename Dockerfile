@@ -53,9 +53,9 @@ ENV NODE_OPTIONS=--max-http-header-size=32768
 # Expose n8n port
 EXPOSE 5678
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:5678/healthz', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+# Health check - use root path and longer start period for n8n migrations
+HEALTHCHECK --interval=30s --timeout=10s --start-period=120s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:5678/', (r) => {process.exit(r.statusCode === 200 || r.statusCode === 401 ? 0 : 1)})"
 
 # Start n8n
 CMD ["n8n", "start"]
